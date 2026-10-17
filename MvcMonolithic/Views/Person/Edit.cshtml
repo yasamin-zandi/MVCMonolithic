@@ -1,0 +1,70 @@
+﻿@model MvcMonolithic.ApplicationService.Dtos.EditPersonDto
+
+@{
+    ViewData["Title"] = "ویرایش شخص";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card custom-card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="p-3 bg-warning-subtle text-warning-emphasis rounded-4">
+                        <i class="bi bi-person-gear fs-3"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0 text-dark">ویرایش اطلاعات شخص</h4>
+                        <p class="text-muted small mb-0">اطلاعات هویتی را ویرایش و ذخیره کنید.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body px-4 pb-4">
+                <form asp-action="Edit" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- نگهداری شناسه -->
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label fw-semibold">نام</label>
+                            <input asp-for="FirstName" class="form-control rounded-3 py-2" />
+                            <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label fw-semibold">نام خانوادگی</label>
+                            <input asp-for="LastName" class="form-control rounded-3 py-2" />
+                            <span asp-validation-for="LastName" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="NationalId" class="form-label fw-semibold">کد ملی</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light rounded-end-3 border-start-0 text-muted">
+                                <i class="bi bi-card-text"></i>
+                            </span>
+                            <input asp-for="NationalId" class="form-control rounded-start-3 py-2" maxlength="10" />
+                        </div>
+                        <span asp-validation-for="NationalId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+                        <a asp-action="Index" class="btn btn-light rounded-pill px-4">انصراف</a>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                            <i class="bi bi-floppy me-1"></i> ذخیره تغییرات
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
