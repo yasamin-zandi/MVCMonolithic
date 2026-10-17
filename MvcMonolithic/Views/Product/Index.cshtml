@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MvcMonolithic.ApplicationService.Dtos.GetProductDto>
+
+@{
+    ViewData["Title"] = "لیست کالاها";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">کالاها و خدمات</h3>
+        <p class="text-muted small mb-0">مدیریت لیست محصولات، ویرایش اطلاعات و قیمت‌ها</p>
+    </div>
+    <a asp-action="Create" class="btn btn-modern-primary d-inline-flex align-items-center gap-2">
+        <i class="bi bi-plus-circle"></i> ثبت کالای جدید
+    </a>
+</div>
+
+<div class="card custom-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table align-middle table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="py-3 px-4">شناسه</th>
+                        <th class="py-3 px-4">عنوان محصول</th>
+                        <th class="py-3 px-4">دسته‌بندی</th>
+                        <th class="py-3 px-4 text-center">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="px-4 fw-medium text-secondary">#@item.Id</td>
+                                <td class="px-4 fw-bold text-dark">@item.Title</td>
+                                <td class="px-4">
+                                    <span class="badge bg-light text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                                        @item.CategoryTitle
+                                    </span>
+                                </td>
+                                
+                           <td class="px-4 text-center">
+    <div class="d-inline-flex gap-1 align-items-center">
+        <!-- ویرایش -->
+        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+            <i class="bi bi-pencil"></i> ویرایش
+        </a>
+
+        <!-- جزئیات -->
+        <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+            <i class="bi bi-eye"></i> جزئیات
+        </a>
+
+        <!-- فرم حذف -->
+        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline"
+              onsubmit="return confirm('آیا از حذف کالای «@item.Title» اطمینان دارید؟ این عملیات غیرقابل بازگشت است.');">
+            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                <i class="bi bi-trash3"></i> حذف
+            </button>
+        </form>
+    </div>
+</td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-50"></i>
+                                هنوز هیچ محصولی ثبت نشده است!
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

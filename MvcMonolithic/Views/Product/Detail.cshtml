@@ -1,0 +1,83 @@
+﻿@model MvcMonolithic.ApplicationService.Dtos.GetProductDto
+
+@{
+    ViewData["Title"] = "جزئیات محصول";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+        <div class="card custom-card border-0 shadow-sm rounded-4 overflow-hidden">
+            <!-- هدر کارت با گرادینت ملایم -->
+            <div class="card-header bg-white border-bottom border-light-subtle pt-4 px-4 pb-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 bg-primary-subtle text-primary rounded-4">
+                            <i class="bi bi-box-seam-fill fs-3"></i>
+                        </div>
+                        <div>
+                            <span class="badge bg-light text-secondary border rounded-pill px-3 py-1 mb-1 font-monospace">
+                                کد کالا: #@Model.Id
+                            </span>
+                            <h4 class="fw-bold mb-0 text-dark">@Model.Title</h4>
+                        </div>
+                    </div>
+                    <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold">
+                        <i class="bi bi-check-circle-fill me-1"></i> فعال در انبار
+                    </span>
+                </div>
+            </div>
+
+            <!-- بدنه اطلاعات -->
+            <div class="card-body px-4 py-4">
+                <div class="row g-3">
+                    <!-- عنوان کالا -->
+                    <div class="col-12">
+                        <div class="p-3 rounded-3 bg-light border-0 d-flex justify-content-between align-items-center">
+                            <span class="text-muted d-flex align-items-center gap-2">
+                                <i class="bi bi-tag-fill text-primary"></i> عنوان کامل محصول:
+                            </span>
+                            <span class="fw-bold text-dark fs-6">@Model.Title</span>
+                        </div>
+                    </div>
+
+                    <!-- موجودی انبار -->
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 bg-light border-0 d-flex justify-content-between align-items-center">
+                            <span class="text-muted d-flex align-items-center gap-2">
+                                <i class="bi bi-layers-fill text-warning"></i> موجودی:
+                            </span>
+                            <span class="fw-bold font-monospace fs-5 @(Model.Count > 0 ? "text-success" : "text-danger")">
+                                @Model.Count <small class="text-muted fs-6 fw-normal">عدد</small>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- دسته‌بندی -->
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 bg-light border-0 d-flex justify-content-between align-items-center">
+                            <span class="text-muted d-flex align-items-center gap-2">
+                                <i class="bi bi-grid-fill text-info"></i> دسته‌بندی:
+                            </span>
+                            <span class="badge bg-info-subtle text-info-emphasis px-3 py-2 rounded-pill fw-semibold">
+                                @(string.IsNullOrEmpty(Model.CategoryTitle) ? "نامشخص" : Model.CategoryTitle)
+                            </span>
+                        </div>
+
+                    
+                    </div>
+                </div>
+            </div>
+
+            <!-- فوتر با اکشن‌های سریع -->
+            <div class="card-footer bg-light-subtle border-top border-light-subtle px-4 py-3 d-flex justify-content-between align-items-center">
+                <a asp-action="Index" class="btn btn-light rounded-pill px-4 text-secondary">
+                    <i class="bi bi-arrow-right me-1"></i> بازگشت به لیست
+                </a>
+
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-pencil-square me-1"></i> ویرایش محصول
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

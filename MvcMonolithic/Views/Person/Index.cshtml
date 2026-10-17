@@ -1,0 +1,135 @@
+﻿@model IEnumerable<MvcMonolithic.ApplicationService.Dtos.GetPersonDto>
+
+@{
+    ViewData["Title"] = "مدیریت اشخاص";
+}
+
+<!-- هدر و دکمه افزودن -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h3 class="fw-bold text-dark mb-1">
+            <i class="bi bi-people-fill text-primary me-2"></i> فهرست اشخاص
+        </h3>
+        <p class="text-muted small mb-0">مدیریت، ویرایش و مشاهده اطلاعات کاربران و پرسنل</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary rounded-pill px-4 shadow-sm d-flex align-items-center gap-2">
+        <i class="bi bi-person-plus-fill fs-6"></i>
+        <span>افزودن شخص جدید</span>
+    </a>
+</div>
+
+<!-- کارت جدول اصلی -->
+<div class="card custom-card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-nowrap">
+                <thead class="table-light border-bottom">
+                    <tr>
+                        <th class="py-3 px-4 text-secondary">#</th>
+                        <th class="py-3 text-secondary">نام و نام خانوادگی</th>
+                        <th class="py-3 text-secondary">کد ملی</th>
+                        <th class="py-3 text-center text-secondary">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        int index = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="px-4 text-muted fw-semibold">@index</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-circle bg-primary-subtle text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                                            @(string.IsNullOrEmpty(item.FirstName) ? "?" : item.FirstName.Substring(0, 1))
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">@item.FirstName @item.LastName</div>
+                                            <small class="text-muted">شناسه: @item.Id</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border px-3 py-2 rounded-pill font-monospace fs-6">
+                                        <i class="bi bi-card-heading text-secondary me-1"></i> @item.NationalId
+                                    </span>
+                                </td>
+                                <td class="px-4 text-center">
+                                    <div class="d-inline-flex gap-1 align-items-center">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                            <i class="bi bi-pencil"></i> ویرایش
+                                        </a>
+                                        <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                                            <i class="bi bi-eye"></i> جزئیات
+                                        </a>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"
+                                                data-id="@item.Id"
+                                                data-name="@item.FirstName @item.LastName">
+                                            <i class="bi bi-trash3"></i> حذف
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">
+                                <i class="bi bi-person-x fs-1 d-block mb-2 text-secondary"></i>
+                                هیچ شخصی در سامانه ثبت نشده است.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal مدرن تأیید حذف -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title text-danger fw-bold" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> تأیید حذف شخص
+                </h5>
+                <button type="button" class="btn-close ms-0 me-auto" data-bs-dismiss="modal" aria-label="بستن"></button>
+            </div>
+            <div class="modal-body py-3">
+                <p class="mb-0 text-muted">
+                    آیا از حذف اطلاعات <strong id="personNameToDelete" class="text-dark"></strong> مطمئن هستید؟
+                </p>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">انصراف</button>
+                <form id="deleteForm" method="post" asp-action="Delete">
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">بله، حذف شود</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+        if (deleteModal) {
+            deleteModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const personId = button.getAttribute('data-id');
+                const personName = button.getAttribute('data-name');
+
+                document.getElementById('personNameToDelete').textContent = `«${personName}»`;
+                const form = document.getElementById('deleteForm');
+                form.action = `/Person/Delete/${personId}`;
+            });
+        }
+    </script>
+}
